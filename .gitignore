@@ -1,0 +1,4 @@
+node_modules
+exports
+
+/src/db/config.ts
