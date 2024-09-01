@@ -12,7 +12,13 @@ import { zodCommand } from '../src/utils/zod-command'
 const exp = zodCommand({
 	name: 'export',
 	description: 'Export the database to CSV',
-	args: { file: z.string().min(1).describe('The file to export to') },
+	args: {
+		file: z
+			.string()
+			.min(1)
+			.default(`./exports/${new Date().toISOString().split('T')[0]}.csv`)
+			.describe('The file to export to'),
+	},
 	opts: {
 		delimiter_char,
 		orderBy_column,
