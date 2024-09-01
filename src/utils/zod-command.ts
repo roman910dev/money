@@ -38,7 +38,7 @@ const zodCore = <T>(zod: z.ZodTypeAny, fn: (zod: z.ZodTypeAny) => T) => {
 const zodEnumVals = (zod: z.ZodTypeAny) =>
 	zodCore(zod, (zod) => (zod instanceof z.ZodEnum ? zod._def.values : null))
 
-const zodBoolean = (zod: z.ZodTypeAny) =>
+const zodIsBoolean = (zod: z.ZodTypeAny) =>
 	zodCore(zod, (zod) => (zod instanceof z.ZodBoolean ? true : false))
 
 const zodParser = (zod: z.ZodTypeAny, opt?: 'opt') => (value: string) => {
@@ -64,12 +64,14 @@ export const zodOption = (key: string, zod: z.ZodTypeAny) => {
 	const arg = key.includes('_') ? key.split('_').slice(1).join('-') : key
 	if (key.includes('_')) [key] = key.split('_')
 	key = kebabCase(key)
+	const isBoolean = zodIsBoolean(zod)
 	const flag =
-		`--${key} ` +
-		(zodBoolean(zod) ? '' : zod.isOptional() ? `[${arg}]` : `<${arg}>`)
+		`--${key}` +
+		(isBoolean ? '' : zod.isOptional() ? ` [${arg}]` : ` <${arg}>`)
 	const flags = abbr ? `-${abbr}, ${flag}` : flag
 	const opt = new Option(flags, description).argParser(zodParser(zod, 'opt'))
 	if (zodDefault(zod)) opt.default(zod.parse(zodDefault(zod)))
+	if (isBoolean) opt.optional = true
 	const choices = zodEnumVals(zod)
 	if (choices) opt.choices(choices)
 	return opt
