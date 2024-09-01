@@ -34,8 +34,19 @@ export const commasArray = <Output, Def extends z.ZodTypeDef, Input>(
 
 export const date = z
 	.string()
-	.date()
-	.transform((v) => new Date(v))
+	.regex(/^(\d{4}-)?\d{1,2}-\d{1,2}/)
+	.transform((v) => {
+		const spl = v.split('-').map((v) => v.padStart(2, '0'))
+		const withYear =
+			spl.length === 3 ? spl : [new Date().getFullYear(), ...spl]
+		return withYear.join('-')
+	})
+	.pipe(
+		z
+			.string()
+			.date()
+			.transform((v) => new Date(v)),
+	)
 
 export const amount = z.string().regex(/^\d+(\.\d{1,2})?$/)
 
