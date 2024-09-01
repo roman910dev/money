@@ -2,3 +2,4 @@ node_modules
 exports
 
 /src/db/config.ts
+/src/utils/templates.ts
