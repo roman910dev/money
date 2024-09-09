@@ -48,7 +48,19 @@ export const date = z
 			.transform((v) => new Date(v)),
 	)
 
-export const amount = z.string().regex(/^\d+(\.\d{1,2})?$/)
+export const amount = z
+	.string()
+	.regex(/^[\d+-.%*()]+$/)
+	.transform((v, ctx) => {
+		const res = Function(`return ${v}`)()
+		if (typeof res === 'number' && !isNaN(res) && isFinite(res))
+			return res.toFixed(2)
+		ctx.addIssue({
+			code: 'custom',
+			message: 'Invalid amount value.',
+		})
+		return z.NEVER
+	})
 
 const optionalEnum = <T extends string>(values: readonly [T, ...T[]]) =>
 	z
