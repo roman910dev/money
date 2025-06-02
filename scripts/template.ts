@@ -9,13 +9,22 @@ import { transactionOpts } from '../src/utils/command-options'
 import templates from '../src/utils/templates'
 import { zodCommand } from '../src/utils/zod-command'
 
-const getTxs = (
+import { afterInsert } from './insert'
+
+const getTxs = async (
 	template: keyof typeof templates,
 	tx: Partial<zs.InsertTx>,
-): Promise<zs.InsertTx[]> =>
-	templates[template](tx).then((txs) =>
-		txs.map(({ date, ...tx }) => ({ date: date ?? new Date(), ...tx })),
-	)
+): Promise<zs.InsertTx[]> => {
+	const temp = templates[template]
+	const txs =
+		typeof temp === 'function'
+			? await temp(tx)
+			: (Array.isArray(temp) ? temp : [temp]).map((t) => ({
+					...t,
+					...tx,
+				}))
+	return txs.map(({ date, ...tx }) => ({ date: date ?? new Date(), ...tx }))
+}
 
 const template = zodCommand({
 	name: 'template',
@@ -34,6 +43,7 @@ const template = zodCommand({
 		})
 		if (!ans) return
 		await db.insert(transactions).values(txs)
+		await afterInsert(txs)
 	},
 })
 

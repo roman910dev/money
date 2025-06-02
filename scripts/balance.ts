@@ -36,6 +36,28 @@ const getBalance = async (account: zs.Account) => {
 	return { account, income, expenses, balance }
 }
 
+interface BalancesTableOptions {
+	sort?: boolean
+}
+export const makeBalancesTable = async (
+	accounts: zs.Account[],
+	{ sort = false }: BalancesTableOptions = {},
+) => {
+	const balances = await Promise.all(accounts.map(getBalance))
+	if (sort) balances.sort((a, b) => b.balance - a.balance)
+	const table = new Table({
+		head: ['Account', 'Income', 'Expenses', 'Balance'],
+		style: { head: ['cyan'] },
+	})
+	table.push(
+		...balances.map(({ account, income, expenses, balance }) => [
+			account,
+			...[income, expenses, balance].map((v) => tableNum(v)),
+		]),
+	)
+	return table
+}
+
 const balance = zodCommand({
 	name: 'balance',
 	description: 'Show the balance of one or more accounts',
@@ -46,19 +68,7 @@ const balance = zodCommand({
 			.describe('The accounts to show the balance of'),
 	},
 	async action({ accounts }) {
-		const balances = await Promise.all(accounts.map(getBalance))
-		balances.sort((a, b) => b.balance - a.balance)
-		const table = new Table({
-			head: ['Account', 'Income', 'Expenses', 'Balance'],
-			style: { head: ['cyan'] },
-		})
-		table.push(
-			...balances.map(({ account, income, expenses, balance }) => [
-				account,
-				...[income, expenses, balance].map((v) => tableNum(v)),
-			]),
-		)
-
+		const table = await makeBalancesTable(accounts, { sort: true })
 		console.log(table.toString())
 	},
 })
