@@ -1,4 +1,5 @@
 import { writeFileSync } from 'fs'
+import path from 'path'
 
 import { asc } from 'drizzle-orm'
 import { z } from 'zod'
@@ -9,6 +10,11 @@ import { formatTx } from '../src/utils'
 import { delimiter_char, orderBy_column } from '../src/utils/command-options'
 import { zodCommand } from '../src/utils/zod-command'
 
+const defaultFile = path.join(
+	__dirname,
+	`../exports/${new Date().toISOString().split('T')[0]}.csv`,
+)
+
 const exp = zodCommand({
 	name: 'export',
 	description: 'Export the database to CSV',
@@ -16,7 +22,7 @@ const exp = zodCommand({
 		file: z
 			.string()
 			.min(1)
-			.default(`./exports/${new Date().toISOString().split('T')[0]}.csv`)
+			.default(defaultFile)
 			.describe('The file to export to'),
 	},
 	opts: {
@@ -32,6 +38,9 @@ const exp = zodCommand({
 			.join('\n')
 
 		writeFileSync(file, csv, 'utf-8')
+
+		console.log('Exported to:')
+		console.log(path.resolve(file))
 	},
 })
 

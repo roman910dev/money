@@ -23,7 +23,7 @@ const imp = zodCommand({
 			.describe('H;The CSV has a header row'),
 		idColumn: z
 			.boolean()
-			.default(false)
+			.default(true)
 			.describe('i;The CSV has an ID column, which will be ignored'),
 	},
 	async action({ file }, { delimiter, header, idColumn }) {
