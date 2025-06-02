@@ -9,7 +9,8 @@ module.exports = {
 	trailingComma: 'all',
 	bracketSpacing: true,
 	bracketSameLine: false,
-    plugins: ['@ianvs/prettier-plugin-sort-imports'],
+	experimentalTernaries: true,
+	plugins: ['@ianvs/prettier-plugin-sort-imports'],
 	importOrder: [
 		'<BUILTIN_MODULES>', // Node.js built-in modules
 		'',
@@ -25,6 +26,6 @@ module.exports = {
 		'<TYPES>^[.]$',
 		'^[.]$', // index imports
 	],
-    importOrderParserPlugins: ['typescript'],
-	importOrderTypeScriptVersion: '5.3.3'
+	importOrderParserPlugins: ['typescript'],
+	importOrderTypeScriptVersion: '5.3.3',
 }
