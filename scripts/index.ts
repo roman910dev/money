@@ -5,6 +5,7 @@ import del from './delete'
 import exp from './export'
 import imp from './import'
 import insert from './insert'
+import tags from './tags'
 import template from './template'
 import test from './test'
 import txs from './txs'
@@ -20,6 +21,7 @@ program
 	.addCommand(exp)
 	.addCommand(imp)
 	.addCommand(insert)
+	.addCommand(tags)
 	.addCommand(template)
 	.addCommand(test)
 	.addCommand(txs)

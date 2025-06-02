@@ -1,3 +1,10 @@
 {
-	"conventionalCommits.scopes": ["export", "dev", "template", "args", "txs"]
+	"conventionalCommits.scopes": [
+		"export",
+		"dev",
+		"template",
+		"args",
+		"txs",
+		"tags"
+	]
 }
