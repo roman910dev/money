@@ -1,6 +1,7 @@
 import Table from 'cli-table3'
 import { asc, eq, or } from 'drizzle-orm'
 import _ from 'lodash'
+import { zodCommand } from 'zod-commander'
 
 import db from '../src/db'
 import { transactions } from '../src/db/schema'
@@ -8,7 +9,6 @@ import { formatDate, tableNum } from '../src/utils'
 import { orderBy_column } from '../src/utils/command-options'
 import { csvTable } from '../src/utils/csv-table'
 import * as zs from '../src/utils/z-schemas'
-import { zodCommand } from '../src/utils/zod-command'
 
 function insertDividers(txs: zs.Transaction[]) {
 	for (let i = 1; i < txs.length; i++) {

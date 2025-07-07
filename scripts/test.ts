@@ -1,5 +1,6 @@
+import { zodCommand } from 'zod-commander'
+
 import * as zs from '../src/utils/z-schemas'
-import { zodCommand } from '../src/utils/zod-command'
 
 const test = zodCommand({
 	name: 'test',
@@ -7,7 +8,7 @@ const test = zodCommand({
 	opts: {
 		id: zs.nat.default(1).transform((v) => v + 2),
 	},
-	async action(_,{ id }) {
+	async action(_, { id }) {
 		console.log(id)
 	},
 })

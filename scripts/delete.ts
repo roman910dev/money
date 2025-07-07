@@ -1,12 +1,12 @@
 import { confirm, select, Separator } from '@inquirer/prompts'
 import { desc, eq, inArray } from 'drizzle-orm'
+import { zodCommand } from 'zod-commander'
 
 import db from '../src/db'
 import { transactions } from '../src/db/schema'
-import { formatTx, } from '../src/utils'
+import { formatTx } from '../src/utils'
 import { toTable } from '../src/utils/to-table'
 import * as zs from '../src/utils/z-schemas'
-import { zodCommand } from '../src/utils/zod-command'
 
 const del = zodCommand({
 	name: 'delete',

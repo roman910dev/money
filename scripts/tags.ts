@@ -1,12 +1,12 @@
 import Table from 'cli-table3'
 import { and, eq, gte, lte, or } from 'drizzle-orm'
 import _ from 'lodash'
+import { zodCommand } from 'zod-commander'
 
 import db from '../src/db'
 import { transactions } from '../src/db/schema'
 import { tableNum } from '../src/utils'
 import { date } from '../src/utils/z-schemas'
-import { zodCommand } from '../src/utils/zod-command'
 
 const getTagsData = async (fromDate?: Date, toDate?: Date) => {
 	const conditions = [

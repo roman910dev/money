@@ -1,8 +1,9 @@
+import { zodCommand } from 'zod-commander'
+
 import db from '../src/db'
 import { transactions } from '../src/db/schema'
 import { zodObjectInput } from '../src/utils'
 import * as zs from '../src/utils/z-schemas'
-import { zodCommand } from '../src/utils/zod-command'
 
 import { makeBalancesTable } from './balance'
 

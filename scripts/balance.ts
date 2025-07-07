@@ -1,12 +1,12 @@
 import Table from 'cli-table3'
 import { eq, isNull, sum } from 'drizzle-orm'
+import { zodCommand } from 'zod-commander'
 
 import db from '../src/db'
 import { accounts } from '../src/db/config'
 import { transactions } from '../src/db/schema'
 import { tableNum } from '../src/utils'
 import * as zs from '../src/utils/z-schemas'
-import { zodCommand } from '../src/utils/zod-command'
 
 const getBalance = async (account: zs.Account) => {
 	const income =
@@ -15,9 +15,9 @@ const getBalance = async (account: zs.Account) => {
 				.select({ sum: sum(transactions.amount) })
 				.from(transactions)
 				.where(
-					account === null
-						? isNull(transactions.to)
-						: eq(transactions.to, account),
+					account === null ?
+						isNull(transactions.to)
+					:	eq(transactions.to, account),
 				)
 		)[0].sum ?? '0'
 	const expenses =
@@ -27,9 +27,9 @@ const getBalance = async (account: zs.Account) => {
 				.select({ sum: sum(transactions.amount) })
 				.from(transactions)
 				.where(
-					account === null
-						? isNull(transactions.from)
-						: eq(transactions.from, account),
+					account === null ?
+						isNull(transactions.from)
+					:	eq(transactions.from, account),
 				)
 		)[0].sum ?? '0')
 	const balance = parseFloat(income) + parseFloat(expenses)

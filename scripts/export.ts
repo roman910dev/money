@@ -3,12 +3,12 @@ import path from 'path'
 
 import { asc } from 'drizzle-orm'
 import { z } from 'zod'
+import { zodCommand } from 'zod-commander'
 
 import db from '../src/db'
 import { transactions } from '../src/db/schema'
 import { formatTx } from '../src/utils'
 import { delimiter_char, orderBy_column } from '../src/utils/command-options'
-import { zodCommand } from '../src/utils/zod-command'
 
 const defaultFile = path.join(
 	__dirname,
