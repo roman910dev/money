@@ -1,4 +1,10 @@
 {
+	
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.formatOnSave": true,
+	"eslint.enable": true,
+	"prettier.enable": true,
+	"biome.enable": false,
 	"conventionalCommits.scopes": [
 		"export",
 		"dev",

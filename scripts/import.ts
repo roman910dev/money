@@ -3,12 +3,12 @@ import { readFileSync } from 'fs'
 import { confirm } from '@inquirer/prompts'
 import chalk from 'chalk'
 import { z } from 'zod'
+import { zodCommand } from 'zod-commander'
 
 import db from '../src/db'
 import { transactions } from '../src/db/schema'
 import { delimiter_char } from '../src/utils/command-options'
 import * as zs from '../src/utils/z-schemas'
-import { zodCommand } from '../src/utils/zod-command'
 
 const imp = zodCommand({
 	name: 'import',
@@ -57,9 +57,9 @@ const imp = zodCommand({
 		const insert = txs.filter((tx) => tx !== null)
 		const ans = await confirm({
 			message:
-				`Insert ${insert.length} transactions?` + errors.length
-					? ` (${errors.length} errors)`
-					: '',
+				`Insert ${insert.length} transactions?` + errors.length ?
+					` (${errors.length} errors)`
+				:	'',
 		})
 		if (ans) await db.insert(transactions).values(insert)
 	},

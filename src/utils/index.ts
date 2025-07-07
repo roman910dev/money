@@ -47,7 +47,7 @@ export const z2v =
 
 export const zodDefault = <Output, Def extends z.ZodTypeDef, Input>(
 	zod: z.ZodType<Output, Def, Input>,
-): Input =>
+): Input | undefined =>
 	zod instanceof z.ZodEffects
 		? zodDefault(zod._def.schema)
 		: zod instanceof z.ZodDefault

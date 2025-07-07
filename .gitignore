@@ -3,3 +3,6 @@ exports
 
 /src/db/config.ts
 /src/utils/templates.ts
+
+*.local/**
+*.local.*
