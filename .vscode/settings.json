@@ -11,6 +11,7 @@
 		"template",
 		"args",
 		"txs",
-		"tags"
+		"tags",
+		"input"
 	]
 }
