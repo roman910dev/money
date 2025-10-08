@@ -16,7 +16,8 @@
 		"txs",
 		"tags",
 		"input",
-		"repo"
+		"repo",
+		"sql"
 	],
 	"[typescript]": {
 		"editor.defaultFormatter": "biomejs.biome"
