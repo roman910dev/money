@@ -5,7 +5,11 @@
 	"main": "index.js",
 	"type": "module",
 	"scripts": {
-		"lint": "ts && eslint . --ext .ts",
+		"check": "biome check .",
+		"fix": "biome check . --write",
+		"format": "biome format . --write",
+		"full-check": "ts && check",
+		"lint": "biome lint .",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"ts": "tsc --noEmit"
 	},
@@ -13,17 +17,11 @@
 	"author": "",
 	"license": "ISC",
 	"devDependencies": {
-		"@ianvs/prettier-plugin-sort-imports": "^4.3.1",
+		"@biomejs/biome": "^2.2.5",
 		"@types/lodash": "^4.17.7",
 		"@types/node": "^20.14.11",
-		"@typescript-eslint/eslint-plugin": "^7.16.1",
-		"@typescript-eslint/parser": "^7.16.1",
 		"commander": "^12.1.0",
 		"drizzle-kit": "^0.23.0",
-		"eslint": "^8.57.0",
-		"eslint-config-prettier": "^9.1.0",
-		"eslint-plugin-import": "^2.29.1",
-		"prettier": "^3.3.3",
 		"ts-node": "^10.9.2",
 		"tsx": "^4.16.2",
 		"typescript": "^5.5.3"
