@@ -1,11 +1,11 @@
-import db from '#/db/index.js'
-import { transactions } from '#/db/schema.js'
-import { tableNum } from '#/utils/index.js'
-import { date } from '#/utils/z-schemas.js'
 import Table from 'cli-table3'
 import { and, eq, gte, lte, or } from 'drizzle-orm'
 import _ from 'lodash'
 import { zodCommand } from 'zod-commander'
+import db from '#/db/index.js'
+import { transactions } from '#/db/schema.js'
+import { tableNum } from '#/utils/index.js'
+import { date } from '#/utils/z-schemas.js'
 
 const getTagsData = async (fromDate?: Date, toDate?: Date) => {
 	const conditions = [
@@ -75,11 +75,11 @@ const tags = zodCommand({
 			...sortedTags.map(([tag, stats]) => {
 				// Calculate percentage based on net value
 				const percentage =
-					stats.net > 0 && totals.earned ?
-						(stats.net / totals.earned) * 100
-					: stats.net < 0 && totals.spent ?
-						(Math.abs(stats.net) / totals.spent) * 100
-					:	0
+					stats.net > 0 && totals.earned
+						? (stats.net / totals.earned) * 100
+						: stats.net < 0 && totals.spent
+							? (Math.abs(stats.net) / totals.spent) * 100
+							: 0
 
 				return [
 					tag || '(no tag)',

@@ -14,11 +14,9 @@ export const csvTable = function (table: Table, opts: ToCSVOptions = {}) {
 			typeof row.map === 'function'
 				? row
 						.map((v) =>
-							[
-								'',
-								v && typeof v === 'object' ? v.content : v,
-								'',
-							].join(encapsulator),
+							['', v && typeof v === 'object' ? v.content : v, ''].join(
+								encapsulator,
+							),
 						)
 						.join(delimeter)
 				: row,

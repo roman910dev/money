@@ -1,11 +1,11 @@
-import { confirm, select, Separator } from '@inquirer/prompts'
+import { confirm, Separator, select } from '@inquirer/prompts'
+import { desc, eq, inArray } from 'drizzle-orm'
+import { zodCommand } from 'zod-commander'
 import db from '#/db/index.js'
 import { transactions } from '#/db/schema.js'
 import { formatTx } from '#/utils/index.js'
 import { toTable } from '#/utils/to-table.js'
 import * as zs from '#/utils/z-schemas.js'
-import { desc, eq, inArray } from 'drizzle-orm'
-import { zodCommand } from 'zod-commander'
 
 const del = zodCommand({
 	name: 'delete',
@@ -31,9 +31,7 @@ const del = zodCommand({
 				message: 'Are you sure you want to delete these transactions?',
 			})
 			if (ans)
-				await db
-					.delete(transactions)
-					.where(inArray(transactions.id, ids))
+				await db.delete(transactions).where(inArray(transactions.id, ids))
 		} else {
 			const txs = await db.query.transactions.findMany({
 				orderBy: desc(transactions.date),
@@ -53,8 +51,7 @@ const del = zodCommand({
 			const ans2 = await confirm({
 				message: 'Are you sure you want to delete this transaction?',
 			})
-			if (ans2)
-				await db.delete(transactions).where(eq(transactions.id, ans))
+			if (ans2) await db.delete(transactions).where(eq(transactions.id, ans))
 		}
 	},
 })

@@ -6,7 +6,7 @@ interface ToTableOptions {
 export const tableSizes = <T extends Record<string, unknown>>(
 	data: T[],
 	{ noHeader = false }: Omit<ToTableOptions, 'sizes'> = {},
-)=> {
+) => {
 	if (!data.length) return []
 	const keys = Object.keys(data[0])
 	return keys.map((key) => {
@@ -27,8 +27,6 @@ export const toTable = <T extends Record<string, unknown>>(
 	const values = data.map((row) => Object.values(row))
 	const lengths = sizes ?? tableSizes(data, { noHeader })
 	return [...(noHeader ? [] : [keys]), ...values].map((row) => {
-		return row
-			.map((value, i) => String(value).padEnd(lengths[i]))
-			.join('  ')
+		return row.map((value, i) => String(value).padEnd(lengths[i])).join('  ')
 	})
 }

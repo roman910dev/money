@@ -1,12 +1,12 @@
-import type * as zs from '#/utils/z-schemas.js'
 import { confirm } from '@inquirer/prompts'
+import { z } from 'zod'
+import { zodCommand } from 'zod-commander'
 import db from '#/db/index.js'
 import { transactions } from '#/db/schema.js'
 import { transactionOpts } from '#/utils/command-options.js'
 import { typedObjectKeys } from '#/utils/index.js'
 import templates from '#/utils/templates.js'
-import { z } from 'zod'
-import { zodCommand } from 'zod-commander'
+import type * as zs from '#/utils/z-schemas.js'
 
 import { afterInsert } from './insert.js'
 
@@ -16,12 +16,12 @@ const getTxs = async (
 ): Promise<zs.InsertTx[]> => {
 	const temp = templates[template]
 	const txs =
-		typeof temp === 'function' ?
-			await temp(tx)
-		:	(Array.isArray(temp) ? temp : [temp]).map((t) => ({
-				...t,
-				...tx,
-			}))
+		typeof temp === 'function'
+			? await temp(tx)
+			: (Array.isArray(temp) ? temp : [temp]).map((t) => ({
+					...t,
+					...tx,
+				}))
 	return txs.map(({ date, ...tx }) => ({ date: date ?? new Date(), ...tx }))
 }
 

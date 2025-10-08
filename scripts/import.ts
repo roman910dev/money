@@ -1,25 +1,20 @@
-import { readFileSync } from 'fs'
-
 import { confirm } from '@inquirer/prompts'
+import chalk from 'chalk'
+import { readFileSync } from 'fs'
+import { z } from 'zod'
+import { zodCommand } from 'zod-commander'
 import db from '#/db/index.js'
 import { transactions } from '#/db/schema.js'
 import { delimiter_char } from '#/utils/command-options.js'
 import * as zs from '#/utils/z-schemas.js'
-import chalk from 'chalk'
-import { z } from 'zod'
-import { zodCommand } from 'zod-commander'
 
 const imp = zodCommand({
 	name: 'import',
-	description:
-		'Import a CSV file of transactions and add them to the database',
+	description: 'Import a CSV file of transactions and add them to the database',
 	args: { file: z.string().min(1).describe('The CSV file to import') },
 	opts: {
 		delimiter_char,
-		header: z
-			.boolean()
-			.default(false)
-			.describe('H;The CSV has a header row'),
+		header: z.boolean().default(false).describe('H;The CSV has a header row'),
 		idColumn: z
 			.boolean()
 			.default(true)
@@ -56,9 +51,9 @@ const imp = zodCommand({
 		const insert = txs.filter((tx) => tx !== null)
 		const ans = await confirm({
 			message:
-				`Insert ${insert.length} transactions?` + errors.length ?
-					` (${errors.length} errors)`
-				:	'',
+				`Insert ${insert.length} transactions?` + errors.length
+					? ` (${errors.length} errors)`
+					: '',
 		})
 		if (ans) await db.insert(transactions).values(insert)
 	},

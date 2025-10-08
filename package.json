@@ -8,7 +8,7 @@
 		"check": "biome check .",
 		"fix": "biome check . --write",
 		"format": "biome format . --write",
-		"full-check": "ts && check",
+		"full-check": "pnpm ts && pnpm check",
 		"lint": "biome lint .",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"ts": "tsc --noEmit"

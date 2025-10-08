@@ -1,8 +1,8 @@
-import type { transactions } from '#/db/schema.js'
 import type { InferInsertModel, InferSelectModel } from 'drizzle-orm'
-import { accounts, tags } from '#/db/config.js'
-import { formatDate } from '#/utils/index.js'
 import { z } from 'zod'
+import { accounts, tags } from '#/db/config.js'
+import type { transactions } from '#/db/schema.js'
+import { formatDate } from '#/utils/index.js'
 
 export type InsertTx = InferInsertModel<typeof transactions>
 export type SelectTx = InferSelectModel<typeof transactions>
@@ -22,9 +22,7 @@ export const commasArray = <Output, Def extends z.ZodTypeDef, Input>(
 			ctx.addIssue({
 				code: 'custom',
 				message:
-					`Invalid value in array: ${v}. ` +
-					res.error.issues[0].message +
-					'.',
+					`Invalid value in array: ${v}. ` + res.error.issues[0].message + '.',
 			})
 			return z.NEVER
 		}),
@@ -35,8 +33,7 @@ export const date = z
 	.regex(/^(\d{4}-)?\d{1,2}-\d{1,2}/)
 	.transform((v) => {
 		const spl = v.split('-').map((v) => v.padStart(2, '0'))
-		const withYear =
-			spl.length === 3 ? spl : [new Date().getFullYear(), ...spl]
+		const withYear = spl.length === 3 ? spl : [new Date().getFullYear(), ...spl]
 		return withYear.join('-')
 	})
 	.pipe(
