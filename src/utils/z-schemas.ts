@@ -21,8 +21,7 @@ export const commasArray = <Output, Def extends z.ZodTypeDef, Input>(
 			if (res.success) return res.data
 			ctx.addIssue({
 				code: 'custom',
-				message:
-					`Invalid value in array: ${v}. ` + res.error.issues[0].message + '.',
+				message: `Invalid value in array: ${v}. ${res.error.issues[0].message}.`,
 			})
 			return z.NEVER
 		}),
@@ -48,7 +47,7 @@ export const amount = z
 	.regex(/^[\d+-.%*()]+$/)
 	.transform((v, ctx) => {
 		const res = Function(`return ${v}`)()
-		if (typeof res === 'number' && !isNaN(res) && isFinite(res))
+		if (typeof res === 'number' && !Number.isNaN(res) && Number.isFinite(res))
 			return res.toFixed(2)
 		ctx.addIssue({
 			code: 'custom',

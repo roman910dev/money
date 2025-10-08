@@ -7,7 +7,7 @@ interface ToCSVOptions {
 }
 
 // // Implement the toCSV method
-export const csvTable = function (table: Table, opts: ToCSVOptions = {}) {
+export const csvTable = (table: Table, opts: ToCSVOptions = {}) => {
 	const { lineSeparator = '\n', encapsulator = '', delimeter = ',' } = opts
 	return [table.options.head, ...table]
 		.map((row) =>

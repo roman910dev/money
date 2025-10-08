@@ -1,6 +1,6 @@
+import { readFileSync } from 'node:fs'
 import { confirm } from '@inquirer/prompts'
 import chalk from 'chalk'
-import { readFileSync } from 'fs'
 import { z } from 'zod'
 import { zodCommand } from 'zod-commander'
 import db from '#/db/index.js'
@@ -50,10 +50,10 @@ const imp = zodCommand({
 		for (const error of errors) console.log(chalk.red(error))
 		const insert = txs.filter((tx) => tx !== null)
 		const ans = await confirm({
-			message:
-				`Insert ${insert.length} transactions?` + errors.length
-					? ` (${errors.length} errors)`
-					: '',
+			message: [
+				`Insert ${insert.length} transactions?`,
+				errors.length ? ` (${errors.length} errors)` : '',
+			].join(''),
 		})
 		if (ans) await db.insert(transactions).values(insert)
 	},

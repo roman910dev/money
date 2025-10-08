@@ -41,7 +41,7 @@ const del = zodCommand({
 			const ans = await select({
 				message: 'Select a transaction to delete',
 				choices: [
-					new Separator(' ' + header),
+					new Separator(` ${header}`),
 					...rows.map((row, i) => ({
 						name: row,
 						value: txs[i].id,

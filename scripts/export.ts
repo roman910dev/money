@@ -1,6 +1,6 @@
+import { writeFileSync } from 'node:fs'
+import path from 'node:path'
 import { asc } from 'drizzle-orm'
-import { writeFileSync } from 'fs'
-import path from 'path'
 import { z } from 'zod'
 import { zodCommand } from 'zod-commander'
 import db from '#/db/index.js'

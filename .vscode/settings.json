@@ -17,5 +17,11 @@
 		"tags",
 		"input",
 		"repo"
-	]
+	],
+	"[typescript]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"[json]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	}
 }
