@@ -16,12 +16,21 @@
 		"txs",
 		"tags",
 		"input",
-		"repo"
+		"repo",
+		"sql"
 	],
 	"[typescript]": {
 		"editor.defaultFormatter": "biomejs.biome"
 	},
 	"[json]": {
 		"editor.defaultFormatter": "biomejs.biome"
-	}
+	},
+	"sqltools.connections": [
+		{
+			"previewLimit": 50,
+			"driver": "SQLite",
+			"name": "money",
+			"database": "money.db"
+		}
+	]
 }

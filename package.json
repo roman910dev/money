@@ -20,22 +20,23 @@
 		"@biomejs/biome": "^2.2.5",
 		"@types/lodash": "^4.17.20",
 		"@types/node": "^24.7.0",
-		"commander": "^14.0.1",
 		"drizzle-kit": "^0.31.5",
 		"ts-node": "^10.9.2",
+		"tsc-alias": "^1.8.16",
 		"tsx": "^4.20.6",
-		"typescript": "^5.9.3",
-		"zod-commander": "^0.0.3"
+		"typescript": "^5.9.3"
 	},
 	"dependencies": {
 		"@inquirer/prompts": "^7.8.6",
+		"@libsql/client": "^0.15.15",
 		"chalk": "^5.6.2",
 		"cli-table3": "^0.6.5",
+		"commander": "^14.0.1",
 		"drizzle-orm": "^0.44.6",
 		"fuse.js": "^7.1.0",
 		"lodash": "^4.17.21",
-		"mysql2": "^3.15.2",
-		"zod": "3"
+		"zod": "^3.25.76",
+		"zod-commander": "^0.0.4"
 	},
 	"bin": {
 		"money": "./bin/run.js"

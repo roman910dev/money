@@ -5,6 +5,6 @@ import { dbUrl } from './src/db/config.js'
 export default {
 	schema: './src/db/schema.ts',
 	out: './drizzle',
-	dialect: 'mysql',
+	dialect: 'sqlite',
 	dbCredentials: { url: dbUrl },
 } satisfies Config

@@ -4,5 +4,6 @@ exports
 /src/db/config.ts
 /src/utils/templates.ts
 
+*.db
 *.local/**
 *.local.*
