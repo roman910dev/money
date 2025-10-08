@@ -7,10 +7,10 @@ import db from '#/db/index.js'
 import { transactions } from '#/db/schema.js'
 import { delimiter_char, orderBy_column } from '#/utils/command-options.js'
 import { formatTx } from '#/utils/index.js'
+import paths from '#/utils/paths.js'
 
-const defaultFile = path.join(
-	__dirname,
-	`../exports/${new Date().toISOString().split('T')[0]}.csv`,
+const defaultFile = paths.root(
+	`/exports/${new Date().toISOString().split('T')[0]}.csv`,
 )
 
 const exp = zodCommand({
