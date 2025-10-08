@@ -1,11 +1,10 @@
 import { zodCommand } from 'zod-commander'
+import db from '#/db/index.js'
+import { transactions } from '#/db/schema.js'
+import { zodObjectInput } from '#/utils/index.js'
+import * as zs from '#/utils/z-schemas.js'
 
-import db from '../src/db'
-import { transactions } from '../src/db/schema'
-import { zodObjectInput } from '../src/utils'
-import * as zs from '../src/utils/z-schemas'
-
-import { makeBalancesTable } from './balance'
+import { makeBalancesTable } from './balance.js'
 
 export const afterInsert = async (
 	transactions: Pick<zs.Transaction, 'from' | 'to'>[],

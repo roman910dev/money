@@ -1,15 +1,14 @@
 import { confirm } from '@inquirer/prompts'
 import { z } from 'zod'
 import { zodCommand } from 'zod-commander'
+import db from '#/db/index.js'
+import { transactions } from '#/db/schema.js'
+import { transactionOpts } from '#/utils/command-options.js'
+import { typedObjectKeys } from '#/utils/index.js'
+import templates from '#/utils/templates.js'
+import type * as zs from '#/utils/z-schemas.js'
 
-import type * as zs from '../src/utils/z-schemas'
-import db from '../src/db'
-import { transactions } from '../src/db/schema'
-import { typedObjectKeys } from '../src/utils'
-import { transactionOpts } from '../src/utils/command-options'
-import templates from '../src/utils/templates'
-
-import { afterInsert } from './insert'
+import { afterInsert } from './insert.js'
 
 const getTxs = async (
 	template: keyof typeof templates,
@@ -17,12 +16,12 @@ const getTxs = async (
 ): Promise<zs.InsertTx[]> => {
 	const temp = templates[template]
 	const txs =
-		typeof temp === 'function' ?
-			await temp(tx)
-		:	(Array.isArray(temp) ? temp : [temp]).map((t) => ({
-				...t,
-				...tx,
-			}))
+		typeof temp === 'function'
+			? await temp(tx)
+			: (Array.isArray(temp) ? temp : [temp]).map((t) => ({
+					...t,
+					...tx,
+				}))
 	return txs.map(({ date, ...tx }) => ({ date: date ?? new Date(), ...tx }))
 }
 

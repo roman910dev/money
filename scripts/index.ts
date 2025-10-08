@@ -1,14 +1,14 @@
 import { Command } from 'commander'
 
-import balance from './balance'
-import del from './delete'
-import exp from './export'
-import imp from './import'
-import insert from './insert'
-import tags from './tags'
-import template from './template'
-import test from './test'
-import txs from './txs'
+import balance from './balance.js'
+import del from './delete.js'
+import exp from './export.js'
+import imp from './import.js'
+import insert from './insert.js'
+import tags from './tags.js'
+import template from './template.js'
+import test from './test.js'
+import txs from './txs.js'
 
 const program = new Command()
 

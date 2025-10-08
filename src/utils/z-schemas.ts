@@ -1,10 +1,8 @@
 import type { InferInsertModel, InferSelectModel } from 'drizzle-orm'
 import { z } from 'zod'
-
-import type { transactions } from '../db/schema'
-import { accounts, tags } from '../db/config'
-
-import { formatDate } from '.'
+import { accounts, tags } from '#/db/config.js'
+import type { transactions } from '#/db/schema.js'
+import { formatDate } from '#/utils/index.js'
 
 export type InsertTx = InferInsertModel<typeof transactions>
 export type SelectTx = InferSelectModel<typeof transactions>
@@ -23,10 +21,7 @@ export const commasArray = <Output, Def extends z.ZodTypeDef, Input>(
 			if (res.success) return res.data
 			ctx.addIssue({
 				code: 'custom',
-				message:
-					`Invalid value in array: ${v}. ` +
-					res.error.issues[0].message +
-					'.',
+				message: `Invalid value in array: ${v}. ${res.error.issues[0].message}.`,
 			})
 			return z.NEVER
 		}),
@@ -37,8 +32,7 @@ export const date = z
 	.regex(/^(\d{4}-)?\d{1,2}-\d{1,2}/)
 	.transform((v) => {
 		const spl = v.split('-').map((v) => v.padStart(2, '0'))
-		const withYear =
-			spl.length === 3 ? spl : [new Date().getFullYear(), ...spl]
+		const withYear = spl.length === 3 ? spl : [new Date().getFullYear(), ...spl]
 		return withYear.join('-')
 	})
 	.pipe(
@@ -53,7 +47,7 @@ export const amount = z
 	.regex(/^[\d+-.%*()]+$/)
 	.transform((v, ctx) => {
 		const res = Function(`return ${v}`)()
-		if (typeof res === 'number' && !isNaN(res) && isFinite(res))
+		if (typeof res === 'number' && !Number.isNaN(res) && Number.isFinite(res))
 			return res.toFixed(2)
 		ctx.addIssue({
 			code: 'custom',

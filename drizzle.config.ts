@@ -1,6 +1,6 @@
 import type { Config } from 'drizzle-kit'
 
-import { dbUrl } from './src/db/config'
+import { dbUrl } from './src/db/config.js'
 
 export default {
 	schema: './src/db/schema.ts',

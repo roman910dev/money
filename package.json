@@ -3,39 +3,39 @@
 	"version": "1.0.0",
 	"description": "",
 	"main": "index.js",
+	"type": "module",
 	"scripts": {
-		"lint": "tsc --noEmit && eslint . --ext .ts",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"check": "biome check .",
+		"fix": "biome check . --write",
+		"format": "biome format . --write",
+		"full-check": "pnpm ts && pnpm check",
+		"lint": "biome lint .",
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"ts": "tsc --noEmit"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"devDependencies": {
-		"@ianvs/prettier-plugin-sort-imports": "^4.3.1",
-		"@types/lodash": "^4.17.7",
-		"@types/node": "^20.14.11",
-		"@typescript-eslint/eslint-plugin": "^7.16.1",
-		"@typescript-eslint/parser": "^7.16.1",
-		"commander": "^12.1.0",
-		"drizzle-kit": "^0.23.0",
-		"eslint": "^8.57.0",
-		"eslint-config-prettier": "^9.1.0",
-		"eslint-plugin-import": "^2.29.1",
-		"prettier": "^3.3.3",
+		"@biomejs/biome": "^2.2.5",
+		"@types/lodash": "^4.17.20",
+		"@types/node": "^24.7.0",
+		"commander": "^14.0.1",
+		"drizzle-kit": "^0.31.5",
 		"ts-node": "^10.9.2",
-		"tsx": "^4.16.2",
-		"typescript": "^5.5.3"
+		"tsx": "^4.20.6",
+		"typescript": "^5.9.3",
+		"zod-commander": "^0.0.3"
 	},
 	"dependencies": {
 		"@inquirer/prompts": "^7.8.6",
-		"chalk": "^5.3.0",
+		"chalk": "^5.6.2",
 		"cli-table3": "^0.6.5",
-		"drizzle-orm": "^0.32.0",
+		"drizzle-orm": "^0.44.6",
 		"fuse.js": "^7.1.0",
 		"lodash": "^4.17.21",
-		"mysql2": "^3.10.3",
-		"zod": "^3.23.8",
-		"zod-commander": "github:roman910dev/zod-commander#v0.0.1"
+		"mysql2": "^3.15.2",
+		"zod": "3"
 	},
 	"bin": {
 		"money": "./bin/run.js"

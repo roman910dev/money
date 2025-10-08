@@ -1,26 +1,20 @@
-import { readFileSync } from 'fs'
-
+import { readFileSync } from 'node:fs'
 import { confirm } from '@inquirer/prompts'
 import chalk from 'chalk'
 import { z } from 'zod'
 import { zodCommand } from 'zod-commander'
-
-import db from '../src/db'
-import { transactions } from '../src/db/schema'
-import { delimiter_char } from '../src/utils/command-options'
-import * as zs from '../src/utils/z-schemas'
+import db from '#/db/index.js'
+import { transactions } from '#/db/schema.js'
+import { delimiter_char } from '#/utils/command-options.js'
+import * as zs from '#/utils/z-schemas.js'
 
 const imp = zodCommand({
 	name: 'import',
-	description:
-		'Import a CSV file of transactions and add them to the database',
+	description: 'Import a CSV file of transactions and add them to the database',
 	args: { file: z.string().min(1).describe('The CSV file to import') },
 	opts: {
 		delimiter_char,
-		header: z
-			.boolean()
-			.default(false)
-			.describe('H;The CSV has a header row'),
+		header: z.boolean().default(false).describe('H;The CSV has a header row'),
 		idColumn: z
 			.boolean()
 			.default(true)
@@ -56,10 +50,10 @@ const imp = zodCommand({
 		for (const error of errors) console.log(chalk.red(error))
 		const insert = txs.filter((tx) => tx !== null)
 		const ans = await confirm({
-			message:
-				`Insert ${insert.length} transactions?` + errors.length ?
-					` (${errors.length} errors)`
-				:	'',
+			message: [
+				`Insert ${insert.length} transactions?`,
+				errors.length ? ` (${errors.length} errors)` : '',
+			].join(''),
 		})
 		if (ans) await db.insert(transactions).values(insert)
 	},

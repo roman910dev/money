@@ -1,6 +1,5 @@
 import { z } from 'zod'
-
-import * as zs from './z-schemas'
+import * as zs from '#/utils/z-schemas.js'
 
 export const delimiter_char = z
 	.string()

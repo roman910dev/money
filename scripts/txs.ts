@@ -2,13 +2,12 @@ import Table from 'cli-table3'
 import { asc, eq, or } from 'drizzle-orm'
 import _ from 'lodash'
 import { zodCommand } from 'zod-commander'
-
-import db from '../src/db'
-import { transactions } from '../src/db/schema'
-import { formatDate, tableNum } from '../src/utils'
-import { orderBy_column } from '../src/utils/command-options'
-import { csvTable } from '../src/utils/csv-table'
-import * as zs from '../src/utils/z-schemas'
+import db from '#/db/index.js'
+import { transactions } from '#/db/schema.js'
+import { orderBy_column } from '#/utils/command-options.js'
+import { csvTable } from '#/utils/csv-table.js'
+import { formatDate, tableNum } from '#/utils/index.js'
+import * as zs from '#/utils/z-schemas.js'
 
 function insertDividers(txs: zs.Transaction[]) {
 	for (let i = 1; i < txs.length; i++) {
@@ -83,9 +82,7 @@ const txs = zodCommand({
 			]
 		})
 		table.push(...rows)
-		console.log(
-			csv ? csvTable(table, { delimeter: ';' }) : table.toString(),
-		)
+		console.log(csv ? csvTable(table, { delimeter: ';' }) : table.toString())
 
 		if (summary) {
 			const summary = new Table({

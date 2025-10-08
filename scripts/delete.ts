@@ -1,12 +1,11 @@
-import { confirm, select, Separator } from '@inquirer/prompts'
+import { confirm, Separator, select } from '@inquirer/prompts'
 import { desc, eq, inArray } from 'drizzle-orm'
 import { zodCommand } from 'zod-commander'
-
-import db from '../src/db'
-import { transactions } from '../src/db/schema'
-import { formatTx } from '../src/utils'
-import { toTable } from '../src/utils/to-table'
-import * as zs from '../src/utils/z-schemas'
+import db from '#/db/index.js'
+import { transactions } from '#/db/schema.js'
+import { formatTx } from '#/utils/index.js'
+import { toTable } from '#/utils/to-table.js'
+import * as zs from '#/utils/z-schemas.js'
 
 const del = zodCommand({
 	name: 'delete',
@@ -32,9 +31,7 @@ const del = zodCommand({
 				message: 'Are you sure you want to delete these transactions?',
 			})
 			if (ans)
-				await db
-					.delete(transactions)
-					.where(inArray(transactions.id, ids))
+				await db.delete(transactions).where(inArray(transactions.id, ids))
 		} else {
 			const txs = await db.query.transactions.findMany({
 				orderBy: desc(transactions.date),
@@ -44,7 +41,7 @@ const del = zodCommand({
 			const ans = await select({
 				message: 'Select a transaction to delete',
 				choices: [
-					new Separator(' ' + header),
+					new Separator(` ${header}`),
 					...rows.map((row, i) => ({
 						name: row,
 						value: txs[i].id,
@@ -54,8 +51,7 @@ const del = zodCommand({
 			const ans2 = await confirm({
 				message: 'Are you sure you want to delete this transaction?',
 			})
-			if (ans2)
-				await db.delete(transactions).where(eq(transactions.id, ans))
+			if (ans2) await db.delete(transactions).where(eq(transactions.id, ans))
 		}
 	},
 })
