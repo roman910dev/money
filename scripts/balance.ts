@@ -1,7 +1,7 @@
 import Table from 'cli-table3'
 import { eq, isNull, sum } from 'drizzle-orm'
 import { zodCommand } from 'zod-commander'
-import { accounts } from '#/db/config.js'
+import { accounts } from '#/configs/index.js'
 import db from '#/db/index.js'
 import { transactions } from '#/db/schema.js'
 import { tableNum } from '#/utils/index.js'

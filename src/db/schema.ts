@@ -1,5 +1,5 @@
 import { customType, int, sqliteTable, text } from 'drizzle-orm/sqlite-core'
-import { accounts, tags } from './config.js'
+import { accounts, tags } from '../configs/index.js'
 
 type TsEnumConfig<T extends string> = {
 	length: number
