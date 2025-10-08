@@ -1,10 +1,9 @@
-import { drizzle } from 'drizzle-orm/mysql2'
-import { createConnection } from 'mysql2'
-
+import { createClient } from '@libsql/client'
+import { drizzle } from 'drizzle-orm/libsql'
 import { dbUrl } from './config.js'
 import * as schema from './schema.js'
 
-const connection = createConnection(dbUrl)
-const db = drizzle(connection, { schema, mode: 'default' })
+const client = createClient({ url: dbUrl })
+const db = drizzle({ client, schema })
 
 export default db

@@ -14,7 +14,7 @@ const program = new Command()
 
 program
 	.name('money-cli')
-	.description('A CLI for tracking your money in a MySQL database')
+	.description('A CLI for tracking your money in a SQLite database')
 	.version('0.0.1')
 	.addCommand(balance)
 	.addCommand(del)

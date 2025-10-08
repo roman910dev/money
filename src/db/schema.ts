@@ -1,12 +1,4 @@
-import {
-	customType,
-	date,
-	decimal,
-	mysqlTable,
-	serial,
-	text,
-} from 'drizzle-orm/mysql-core'
-
+import { customType, int, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 import { accounts, tags } from './config.js'
 
 type TsEnumConfig<T extends string> = {
@@ -31,10 +23,31 @@ const tsEnum = <T extends string>(
 		},
 	})(name)
 
-export const transactions = mysqlTable('transactions', {
-	id: serial('id').primaryKey(),
+const date = customType<{
+	data: Date
+	driverData: string
+	default: false
+}>({
+	dataType: () => 'TEXT',
+	toDriver: (value) => value.toISOString(),
+	fromDriver: (value) => new Date(value),
+})
+
+const decimal = (name: string, { scale = 2 }: { scale?: number } = {}) =>
+	customType<{
+		data: string
+		driverData: number
+		default: false
+	}>({
+		dataType: () => 'INTEGER',
+		toDriver: (value) => Math.round(Number(value) * 10 ** scale),
+		fromDriver: (value) => (value / 10 ** scale).toString(),
+	})(name)
+
+export const transactions = sqliteTable('transactions', {
+	id: int('id').primaryKey({ autoIncrement: true }),
 	date: date('date').notNull(),
-	amount: decimal('amount', { precision: 10, scale: 2 }).notNull(),
+	amount: decimal('amount', { scale: 2 }).notNull(),
 	from: tsEnum('from', { length: 50, values: accounts }).notNull(),
 	to: tsEnum('to', { length: 50, values: accounts }).notNull(),
 	description: text('description'),
