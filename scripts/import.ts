@@ -1,14 +1,13 @@
 import { readFileSync } from 'fs'
 
 import { confirm } from '@inquirer/prompts'
+import db from '#/db/index.js'
+import { transactions } from '#/db/schema.js'
+import { delimiter_char } from '#/utils/command-options.js'
+import * as zs from '#/utils/z-schemas.js'
 import chalk from 'chalk'
 import { z } from 'zod'
 import { zodCommand } from 'zod-commander'
-
-import db from '../src/db'
-import { transactions } from '../src/db/schema'
-import { delimiter_char } from '../src/utils/command-options'
-import * as zs from '../src/utils/z-schemas'
 
 const imp = zodCommand({
 	name: 'import',

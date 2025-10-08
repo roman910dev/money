@@ -1,12 +1,11 @@
+import { accounts } from '#/db/config.js'
+import db from '#/db/index.js'
+import { transactions } from '#/db/schema.js'
+import { tableNum } from '#/utils/index.js'
+import * as zs from '#/utils/z-schemas.js'
 import Table from 'cli-table3'
 import { eq, isNull, sum } from 'drizzle-orm'
 import { zodCommand } from 'zod-commander'
-
-import db from '../src/db'
-import { accounts } from '../src/db/config'
-import { transactions } from '../src/db/schema'
-import { tableNum } from '../src/utils'
-import * as zs from '../src/utils/z-schemas'
 
 const getBalance = async (account: zs.Account) => {
 	const income =

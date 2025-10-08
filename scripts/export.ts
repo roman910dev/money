@@ -1,14 +1,13 @@
 import { writeFileSync } from 'fs'
 import path from 'path'
 
+import db from '#/db/index.js'
+import { transactions } from '#/db/schema.js'
+import { delimiter_char, orderBy_column } from '#/utils/command-options.js'
+import { formatTx } from '#/utils/index.js'
 import { asc } from 'drizzle-orm'
 import { z } from 'zod'
 import { zodCommand } from 'zod-commander'
-
-import db from '../src/db'
-import { transactions } from '../src/db/schema'
-import { formatTx } from '../src/utils'
-import { delimiter_char, orderBy_column } from '../src/utils/command-options'
 
 const defaultFile = path.join(
 	__dirname,

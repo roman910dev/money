@@ -1,6 +1,5 @@
+import * as zs from '#/utils/z-schemas.js'
 import { zodCommand } from 'zod-commander'
-
-import * as zs from '../src/utils/z-schemas'
 
 const test = zodCommand({
 	name: 'test',

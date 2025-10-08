@@ -7,7 +7,7 @@ import {
 	text,
 } from 'drizzle-orm/mysql-core'
 
-import { accounts, tags } from './config'
+import { accounts, tags } from './config.js'
 
 type TsEnumConfig<T extends string> = {
 	length: number

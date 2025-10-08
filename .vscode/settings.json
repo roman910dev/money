@@ -1,5 +1,4 @@
 {
-	
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"editor.formatOnSave": true,
 	"eslint.enable": true,
@@ -12,6 +11,7 @@
 		"args",
 		"txs",
 		"tags",
-		"input"
+		"input",
+		"repo"
 	]
 }

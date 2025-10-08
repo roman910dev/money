@@ -1,9 +1,8 @@
+import type { Transaction } from '#/utils/z-schemas.js'
 import { input, search } from '@inquirer/prompts'
 import chalk from 'chalk'
 import Fuse from 'fuse.js'
 import { z } from 'zod'
-
-import type { Transaction } from './z-schemas'
 
 interface FormatNumOptions {
 	invColor: boolean
