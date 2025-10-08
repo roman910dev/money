@@ -1,11 +1,11 @@
 import { confirm } from '@inquirer/prompts'
 import { z } from 'zod'
 import { zodCommand } from 'zod-commander'
+import templates from '#/configs/templates.js'
 import db from '#/db/index.js'
 import { transactions } from '#/db/schema.js'
 import { transactionOpts } from '#/utils/command-options.js'
 import { typedObjectKeys } from '#/utils/index.js'
-import templates from '#/utils/templates.js'
 import type * as zs from '#/utils/z-schemas.js'
 
 import { afterInsert } from './insert.js'

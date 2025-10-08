@@ -1,6 +1,6 @@
 import type { InferInsertModel, InferSelectModel } from 'drizzle-orm'
 import { z } from 'zod'
-import { accounts, tags } from '#/db/config.js'
+import { accounts, tags } from '#/configs/index.js'
 import type { transactions } from '#/db/schema.js'
 import { formatDate } from '#/utils/index.js'
 

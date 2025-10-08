@@ -1,8 +1,8 @@
 node_modules
 exports
+money
 
-/src/db/config.ts
-/src/utils/templates.ts
+/src/configs
 
 *.db
 *.local/**

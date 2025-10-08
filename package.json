@@ -5,6 +5,8 @@
 	"main": "index.js",
 	"type": "module",
 	"scripts": {
+		"build": "tsc -p tsconfig.build.json",
+		"postbuild": "tsc-alias -p tsconfig.build.json",
 		"check": "biome check .",
 		"fix": "biome check . --write",
 		"format": "biome format . --write",
