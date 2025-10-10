@@ -18,7 +18,8 @@
 		"input",
 		"repo",
 		"sql",
-		"delete"
+		"delete",
+		"balance"
 	],
 	"[typescript]": {
 		"editor.defaultFormatter": "biomejs.biome"
