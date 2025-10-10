@@ -10,19 +10,27 @@ import type * as zs from '#/utils/z-schemas.js'
 
 import { afterInsert } from './insert.js'
 
+type TemplateReturn = Omit<zs.InsertTx, 'date'> & Partial<zs.InsertTx>
+export type Templates = Record<
+	string,
+	| TemplateReturn
+	| TemplateReturn[]
+	| ((tx: Partial<zs.InsertTx>) => Promise<TemplateReturn[]>)
+>
+
 const getTxs = async (
 	template: keyof typeof templates,
-	tx: Partial<zs.InsertTx>,
+	tx: Partial<zs.InsertTx> & Pick<zs.InsertTx, 'date'>,
 ): Promise<zs.InsertTx[]> => {
 	const temp = templates[template]
-	const txs =
+	const txs: TemplateReturn[] =
 		typeof temp === 'function'
 			? await temp(tx)
 			: (Array.isArray(temp) ? temp : [temp]).map((t) => ({
 					...t,
 					...tx,
 				}))
-	return txs.map(({ date, ...tx }) => ({ date: date ?? new Date(), ...tx }))
+	return txs.map((newTx) => ({ date: tx.date, ...newTx }))
 }
 
 const template = zodCommand({

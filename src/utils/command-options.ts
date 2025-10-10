@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import * as zs from '#/utils/z-schemas.js'
+import { formatDate } from './index.js'
 
 export const delimiter_char = z
 	.string()
@@ -13,10 +14,17 @@ export const orderBy_column = z
 	.describe('The column to order by')
 
 export const transactionOpts = {
-	date: zs.date.describe('Override transaction date'),
-	amount: zs.amount.describe('Override transaction amount'),
-	from_account: zs.account.describe('Override transaction from account'),
-	to_account: zs.account.describe('Override transaction to account'),
-	description: z.string().describe('Override transaction description'),
-	tag: zs.tag.describe('Override transaction tag'),
+	date: zs.date
+		.default(formatDate(new Date()))
+		.describe('Override transaction date'),
+	amount: zs.amount.optional().describe('Override transaction amount'),
+	from_account: zs.account
+		.optional()
+		.describe('Override transaction from account'),
+	to_account: zs.account.optional().describe('Override transaction to account'),
+	description: z
+		.string()
+		.optional()
+		.describe('Override transaction description'),
+	tag: zs.tag.optional().describe('Override transaction tag'),
 }
