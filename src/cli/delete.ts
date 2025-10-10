@@ -17,9 +17,9 @@ const del = zodCommand({
 			.describe('The IDs of the transactions to delete'),
 	},
 	opts: {
-		limit: zs.nat.describe(
-			'The number of transactions to show when no ids are provided',
-		),
+		limit: zs.nat
+			.default(50)
+			.describe('The number of transactions to show when no ids are provided'),
 	},
 	async action({ ids }, { limit }) {
 		if (ids) {

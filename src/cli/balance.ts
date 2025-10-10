@@ -8,7 +8,7 @@ import { tableNum } from '#/utils/index.js'
 import * as zs from '#/utils/z-schemas.js'
 
 const getBalance = async (account: zs.Account) => {
-	const income =
+	const inc =
 		(
 			await db
 				.select({ sum: sum(transactions.amount) })
@@ -19,7 +19,7 @@ const getBalance = async (account: zs.Account) => {
 						: eq(transactions.to, account),
 				)
 		)[0].sum ?? '0'
-	const expenses =
+	const exp =
 		'-' +
 		((
 			await db
@@ -31,7 +31,9 @@ const getBalance = async (account: zs.Account) => {
 						: eq(transactions.from, account),
 				)
 		)[0].sum ?? '0')
-	const balance = parseFloat(income) + parseFloat(expenses)
+	const income = parseInt(inc, 10) / 100
+	const expenses = parseInt(exp, 10) / 100
+	const balance = income + expenses
 	return { account, income, expenses, balance }
 }
 
