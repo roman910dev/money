@@ -34,7 +34,7 @@ const del = zodCommand({
 				await db.delete(transactions).where(inArray(transactions.id, ids))
 		} else {
 			const txs = await db.query.transactions.findMany({
-				orderBy: desc(transactions.date),
+				orderBy: [desc(transactions.date), desc(transactions.id)],
 				limit,
 			})
 			const [header, ...rows] = toTable(txs.map(formatTx))
