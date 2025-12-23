@@ -84,7 +84,7 @@ const tags = zodCommand({
 				return [
 					tag || '(no tag)',
 					tableNum(stats.earned),
-					tableNum(stats.spent, { invColor: true }),
+					tableNum(stats.spent, { inv: true }),
 					tableNum(stats.net),
 					`${percentage.toFixed(1)}%`,
 				]
@@ -101,7 +101,7 @@ const tags = zodCommand({
 		totalTable.push([
 			'TOTAL',
 			tableNum(totals.earned.toFixed(2)),
-			tableNum(totals.spent.toFixed(2), { invColor: true }),
+			tableNum(totals.spent.toFixed(2), { inv: true }),
 			tableNum(totals.net.toFixed(2)),
 			'100%',
 		])

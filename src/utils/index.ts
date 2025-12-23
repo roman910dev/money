@@ -5,16 +5,17 @@ import { z } from 'zod'
 import type { Transaction } from '#/utils/z-schemas.js'
 
 interface FormatNumOptions {
-	invColor: boolean
+	inv?: boolean
+	invSign?: boolean
 }
 
 export const formatNum = (
 	num: number | string,
-	{ invColor }: FormatNumOptions = { invColor: false },
+	{ inv = false, invSign = false }: FormatNumOptions = {},
 ) => {
 	const n = typeof num === 'string' ? parseFloat(num) : num
-	const s = n.toFixed(2)
-	const x = n * (invColor ? -1 : 1)
+	const s = (n * (invSign && inv ? -1 : 1)).toFixed(2)
+	const x = n * (inv ? -1 : 1)
 	return x < 0 ? chalk.red(s) : x > 0 ? chalk.green(s) : chalk.yellow(s)
 }
 
@@ -27,6 +28,10 @@ export function tableNum(num: number | string, opts?: FormatNumOptions) {
 
 export const typedObjectKeys = <T extends object>(obj: T) =>
 	Object.keys(obj) as [keyof T, ...(keyof T)[]]
+
+export const isTruthy = <T>(
+	value: T | 0 | '' | null | undefined | false,
+): value is T => Boolean(value)
 
 export const formatDate = (date: Date) => date.toISOString().split('T')[0]
 
