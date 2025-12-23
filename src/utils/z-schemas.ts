@@ -29,11 +29,15 @@ export const commasArray = <Output, Def extends z.ZodTypeDef, Input>(
 
 export const date = z
 	.string()
-	.regex(/^(\d{4}-)?\d{1,2}-\d{1,2}/)
+	.regex(/^(?:\d{4}-)?(?:\d{1,2}-)?\d{1,2}/)
 	.transform((v) => {
 		const spl = v.split('-').map((v) => v.padStart(2, '0'))
-		const withYear = spl.length === 3 ? spl : [new Date().getFullYear(), ...spl]
-		return withYear.join('-')
+		const date = new Date()
+		return [
+			spl.at(-3) ?? date.getFullYear(),
+			spl.at(-2) ?? date.getMonth() + 1,
+			spl.at(-1),
+		].join('-')
 	})
 	.pipe(
 		z

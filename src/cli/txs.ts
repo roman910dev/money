@@ -6,7 +6,7 @@ import db from '#/db/index.js'
 import { transactions } from '#/db/schema.js'
 import { orderBy_column } from '#/utils/command-options.js'
 import { csvTable } from '#/utils/csv-table.js'
-import { formatDate, tableNum } from '#/utils/index.js'
+import { formatDate, isTruthy, tableNum } from '#/utils/index.js'
 import * as zs from '#/utils/z-schemas.js'
 
 function insertDividers(txs: zs.Transaction[]) {
@@ -45,8 +45,11 @@ const txs = zodCommand({
 		dividers: zs.flag.describe('Include month dividers'),
 		summary: zs.flag.describe('Show a balance summary at the end'),
 		csv: zs.flag.describe('Format the output in CSV'),
+		pretty: zs.flag.describe(
+			'Use pretty format that can be used to show results to non-technical people',
+		),
 	},
-	async action({ account }, { orderBy, dividers, summary, csv }) {
+	async action({ account }, { orderBy, dividers, summary, csv, pretty }) {
 		const acc = account ?? 'NULL'
 		const txs = await db.query.transactions.findMany({
 			where: or(eq(transactions.from, acc), eq(transactions.to, acc)),
@@ -54,15 +57,15 @@ const txs = zodCommand({
 		})
 		let balance = 0
 		const head = [
-			'Id',
+			!pretty && 'Id',
 			'Date',
 			'Amount',
-			'From',
-			'To',
+			!pretty && 'From',
+			!pretty && 'To',
 			'Description',
 			'Tag',
 			'Balance',
-		]
+		].filter(isTruthy)
 		const table = new Table({ head, style: { head: ['cyan'] } })
 
 		if (dividers || summary) insertDividers(txs)
@@ -71,15 +74,15 @@ const txs = zodCommand({
 			const neg = (!account ? tx.to : tx.from) === acc
 			balance += neg ? -amount : amount
 			return [
-				tx.id,
+				!pretty && tx.id,
 				formatDate(tx.date),
-				tableNum(tx.amount, { invColor: neg }),
-				tx.from,
-				tx.to,
-				tx.description,
-				tx.tag,
+				tableNum(tx.amount, { inv: neg, invSign: pretty }),
+				!pretty && tx.from,
+				!pretty && tx.to,
+				tx.description ?? ' ',
+				tx.tag ?? ' ',
 				tableNum(balance),
-			]
+			].filter(isTruthy)
 		})
 		table.push(...rows)
 		console.log(csv ? csvTable(table, { delimeter: ';' }) : table.toString())
