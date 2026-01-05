@@ -29,13 +29,23 @@ export const date = z
 	.string()
 	.regex(/^(?:\d{4}-)?(?:\d{1,2}-)?\d{1,2}/)
 	.transform((v) => {
-		const spl = v.split('-').map((v) => v.padStart(2, '0'))
+		const spl = v.split('-').map(Number)
 		const date = new Date()
-		return [
-			spl.at(-3) ?? date.getFullYear(),
-			spl.at(-2) ?? date.getMonth() + 1,
-			spl.at(-1),
-		].join('-')
+		const day = spl.at(-1)
+		if (!day) throw new Error('Unexpected contradiction: missing day')
+		const month =
+			spl.at(-2) ??
+			(day > date.getDate()
+				? ((12 + date.getMonth() - 1) % 12) + 1 // date of previous month
+				: date.getMonth() + 1) // date of current month
+		const year =
+			spl.at(-3) ??
+			(month > date.getMonth() + 1
+				? date.getFullYear() - 1 // date of previous year
+				: date.getFullYear()) // date of current year
+		return [year, month, day]
+			.map((s) => String(s ?? '').padStart(2, '0'))
+			.join('-')
 	})
 	.pipe(
 		z
