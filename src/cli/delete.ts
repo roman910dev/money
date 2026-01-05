@@ -1,6 +1,6 @@
 import { confirm, Separator, select } from '@inquirer/prompts'
 import { desc, eq, inArray } from 'drizzle-orm'
-import { zodCommand } from 'zod-commander'
+import { zodCommand } from 'zod-commander/zod4'
 import db from '#/db/index.js'
 import { transactions } from '#/db/schema.js'
 import { formatTx } from '#/utils/index.js'
@@ -18,7 +18,7 @@ const del = zodCommand({
 	},
 	opts: {
 		limit: zs.nat
-			.default(50)
+			.prefault(50)
 			.describe('The number of transactions to show when no ids are provided'),
 	},
 	async action({ ids }, { limit }) {

@@ -10,11 +10,9 @@ export type Transaction = SelectTx
 
 export const int = z.coerce.number().int()
 export const nat = int.nonnegative()
-export const flag = z.boolean().default(false)
+export const flag = z.boolean().prefault(false)
 
-export const commasArray = <Output, Def extends z.ZodTypeDef, Input>(
-	zod: z.ZodType<Output, Def, Input>,
-) =>
+export const commasArray = <Output, Input>(zod: z.ZodType<Output, Input>) =>
 	z.string().transform((v, ctx) =>
 		v.split(',').map((v) => {
 			const res = zod.safeParse(v)
@@ -31,13 +29,23 @@ export const date = z
 	.string()
 	.regex(/^(?:\d{4}-)?(?:\d{1,2}-)?\d{1,2}/)
 	.transform((v) => {
-		const spl = v.split('-').map((v) => v.padStart(2, '0'))
+		const spl = v.split('-').map(Number)
 		const date = new Date()
-		return [
-			spl.at(-3) ?? date.getFullYear(),
-			spl.at(-2) ?? date.getMonth() + 1,
-			spl.at(-1),
-		].join('-')
+		const day = spl.at(-1)
+		if (!day) throw new Error('Unexpected contradiction: missing day')
+		const month =
+			spl.at(-2) ??
+			(day > date.getDate()
+				? ((12 + date.getMonth() - 1) % 12) + 1 // date of previous month
+				: date.getMonth() + 1) // date of current month
+		const year =
+			spl.at(-3) ??
+			(month > date.getMonth() + 1
+				? date.getFullYear() - 1 // date of previous year
+				: date.getFullYear()) // date of current year
+		return [year, month, day]
+			.map((s) => String(s ?? '').padStart(2, '0'))
+			.join('-')
 	})
 	.pipe(
 		z
@@ -71,13 +79,13 @@ export type Account = z.infer<typeof account>
 export const tag = optionalEnum(tags)
 
 export const transaction = z.object({
-	date: date.default(formatDate(new Date())),
+	date: date.prefault(formatDate(new Date())),
 	amount: amount,
-	from: account.default('NULL'),
-	to: account.default('NULL'),
+	from: account.prefault('NULL'),
+	to: account.prefault('NULL'),
 	description: z
 		.string()
 		.optional()
 		.transform((v) => (v === '' ? null : v)),
-	tag: tag.default('NULL'),
+	tag: tag.prefault('NULL'),
 })

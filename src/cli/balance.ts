@@ -1,6 +1,6 @@
 import Table from 'cli-table3'
 import { eq, isNull, sum } from 'drizzle-orm'
-import { zodCommand } from 'zod-commander'
+import { zodCommand } from 'zod-commander/zod4'
 import { accounts } from '#/configs/index.js'
 import db from '#/db/index.js'
 import { transactions } from '#/db/schema.js'
@@ -65,7 +65,7 @@ const balance = zodCommand({
 	args: {
 		accounts: zs
 			.commasArray(zs.account)
-			.default(accounts.join(','))
+			.prefault(accounts.join(','))
 			.describe('The accounts to show the balance of'),
 	},
 	async action({ accounts }) {

@@ -42,33 +42,31 @@ export const formatTx = ({ id, date, ...tx }: Transaction) => ({
 })
 
 export const z2v =
-	<Output, Def extends z.ZodTypeDef, Input>(
-		zod: z.ZodType<Output, Def, Input>,
-	) =>
+	<Output, Input>(zod: z.ZodType<Output, Input>) =>
 	(value: Input) => {
 		const result = zod.safeParse(value)
 		return result.success || result.error.issues[0].message
 	}
 
-export const zodDefault = <Output, Def extends z.ZodTypeDef, Input>(
-	zod: z.ZodType<Output, Def, Input>,
+export const zodDefault = <Output, Input>(
+	zod: z.ZodType<Output, Input>,
 ): Input | undefined =>
-	zod instanceof z.ZodEffects
-		? zodDefault(zod._def.schema)
-		: zod instanceof z.ZodDefault
-			? zod._def.defaultValue()
+	zod instanceof z.ZodPipe
+		? zodDefault(zod.def.in as z.ZodType<unknown, Input>)
+		: zod instanceof z.ZodPrefault
+			? (zod.def.defaultValue as Input)
 			: undefined
 
 const zodCore = (zod: z.ZodTypeAny): z.ZodTypeAny =>
-	'innerType' in zod._def && zod._def.innerType instanceof z.ZodType
-		? zodCore(zod._def.innerType)
-		: 'schema' in zod._def && zod._def.schema instanceof z.ZodType
-			? zodCore(zod._def.schema)
+	'innerType' in zod.def && zod.def.innerType instanceof z.ZodType
+		? zodCore(zod.def.innerType)
+		: 'schema' in zod && zod.schema instanceof z.ZodType
+			? zodCore(zod.schema)
 			: zod
 
-export const zodInput = async <Output, Def extends z.ZodTypeDef>(
+export const zodInput = async <Output>(
 	message: string,
-	zod: z.ZodType<Output, Def, string | undefined>,
+	zod: z.ZodType<Output, string | undefined>,
 ) => {
 	const core = zodCore(zod)
 	if (!(core instanceof z.ZodEnum))
@@ -86,7 +84,7 @@ export const zodInput = async <Output, Def extends z.ZodTypeDef>(
 			message,
 			validate: z2v(zod),
 			source: (input) => {
-				const values = core._def.values as string[]
+				const values = core.options.map(String)
 				const def = zodDefault(zod)
 				if (!input)
 					return values
@@ -101,7 +99,11 @@ export const zodInput = async <Output, Def extends z.ZodTypeDef>(
 	)
 }
 
-export const zodObjectInput = async <S extends z.ZodRawShape>(shape: S) => {
+export const zodObjectInput = async <
+	S extends Record<string, z.ZodType<unknown, string | undefined>>,
+>(
+	shape: S,
+) => {
 	const obj: Record<string, unknown> = {}
 	for (const key in shape) obj[key] = await zodInput(key, shape[key])
 	return obj as z.infer<z.ZodObject<S>>

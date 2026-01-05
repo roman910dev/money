@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs'
 import { confirm } from '@inquirer/prompts'
 import chalk from 'chalk'
 import { z } from 'zod'
-import { zodCommand } from 'zod-commander'
+import { zodCommand } from 'zod-commander/zod4'
 import db from '#/db/index.js'
 import { transactions } from '#/db/schema.js'
 import { delimiter_char } from '#/utils/command-options.js'
@@ -14,10 +14,10 @@ const imp = zodCommand({
 	args: { file: z.string().min(1).describe('The CSV file to import') },
 	opts: {
 		delimiter_char,
-		header: z.boolean().default(false).describe('H;The CSV has a header row'),
+		header: z.boolean().prefault(false).describe('H;The CSV has a header row'),
 		idColumn: z
 			.boolean()
-			.default(true)
+			.prefault(true)
 			.describe('i;The CSV has an ID column, which will be ignored'),
 	},
 	async action({ file }, { delimiter, header, idColumn }) {
