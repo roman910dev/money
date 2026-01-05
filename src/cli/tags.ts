@@ -1,7 +1,7 @@
 import Table from 'cli-table3'
 import { and, eq, gte, lte, or } from 'drizzle-orm'
 import _ from 'lodash'
-import { zodCommand } from 'zod-commander'
+import { zodCommand } from 'zod-commander/zod4'
 import db from '#/db/index.js'
 import { transactions } from '#/db/schema.js'
 import { tableNum } from '#/utils/index.js'

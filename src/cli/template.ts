@@ -1,6 +1,6 @@
 import { confirm } from '@inquirer/prompts'
 import { z } from 'zod'
-import { zodCommand } from 'zod-commander'
+import { zodCommand } from 'zod-commander/zod4'
 import templates from '#/configs/templates.js'
 import db from '#/db/index.js'
 import { transactions } from '#/db/schema.js'

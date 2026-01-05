@@ -37,8 +37,8 @@
 		"drizzle-orm": "^0.44.6",
 		"fuse.js": "^7.1.0",
 		"lodash": "^4.17.21",
-		"zod": "^3.25.76",
-		"zod-commander": "^0.0.4"
+		"zod": "^4.3.5",
+		"zod-commander": "^0.1.0"
 	},
 	"bin": {
 		"money": "./bin/run.js"

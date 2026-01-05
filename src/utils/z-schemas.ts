@@ -10,11 +10,9 @@ export type Transaction = SelectTx
 
 export const int = z.coerce.number().int()
 export const nat = int.nonnegative()
-export const flag = z.boolean().default(false)
+export const flag = z.boolean().prefault(false)
 
-export const commasArray = <Output, Def extends z.ZodTypeDef, Input>(
-	zod: z.ZodType<Output, Def, Input>,
-) =>
+export const commasArray = <Output, Input>(zod: z.ZodType<Output, Input>) =>
 	z.string().transform((v, ctx) =>
 		v.split(',').map((v) => {
 			const res = zod.safeParse(v)
@@ -71,13 +69,13 @@ export type Account = z.infer<typeof account>
 export const tag = optionalEnum(tags)
 
 export const transaction = z.object({
-	date: date.default(formatDate(new Date())),
+	date: date.prefault(formatDate(new Date())),
 	amount: amount,
-	from: account.default('NULL'),
-	to: account.default('NULL'),
+	from: account.prefault('NULL'),
+	to: account.prefault('NULL'),
 	description: z
 		.string()
 		.optional()
 		.transform((v) => (v === '' ? null : v)),
-	tag: tag.default('NULL'),
+	tag: tag.prefault('NULL'),
 })

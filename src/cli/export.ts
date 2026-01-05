@@ -2,7 +2,7 @@ import { writeFileSync } from 'node:fs'
 import path from 'node:path'
 import { asc } from 'drizzle-orm'
 import { z } from 'zod'
-import { zodCommand } from 'zod-commander'
+import { zodCommand } from 'zod-commander/zod4'
 import db from '#/db/index.js'
 import { transactions } from '#/db/schema.js'
 import { delimiter_char, orderBy_column } from '#/utils/command-options.js'
@@ -20,7 +20,7 @@ const exp = zodCommand({
 		file: z
 			.string()
 			.min(1)
-			.default(defaultFile)
+			.prefault(defaultFile)
 			.describe('The file to export to'),
 	},
 	opts: {

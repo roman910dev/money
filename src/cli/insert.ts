@@ -1,4 +1,4 @@
-import { zodCommand } from 'zod-commander'
+import { zodCommand } from 'zod-commander/zod4'
 import db from '#/db/index.js'
 import { transactions } from '#/db/schema.js'
 import { zodObjectInput } from '#/utils/index.js'
@@ -18,7 +18,7 @@ const insert = zodCommand({
 	name: 'insert',
 	description: 'Insert a transaction into the money database',
 	async action() {
-		const transaction = await zodObjectInput(zs.transaction._def.shape())
+		const transaction = await zodObjectInput(zs.transaction.shape)
 		await db.insert(transactions).values(transaction)
 		await afterInsert([transaction])
 	},

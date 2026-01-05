@@ -4,18 +4,18 @@ import { formatDate } from './index.js'
 
 export const delimiter_char = z
 	.string()
-	.default(',')
+	.prefault(',')
 	.transform((v) => (v === 'TAB' ? '\t' : v))
 	.describe('d;The delimiter to use for the CSV')
 
 export const orderBy_column = z
 	.enum(['id', 'date'])
-	.default('id')
+	.prefault('id')
 	.describe('The column to order by')
 
 export const transactionOpts = {
 	date: zs.date
-		.default(formatDate(new Date()))
+		.prefault(formatDate(new Date()))
 		.describe('Override transaction date'),
 	amount: zs.amount.optional().describe('Override transaction amount'),
 	from_account: zs.account

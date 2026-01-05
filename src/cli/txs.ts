@@ -1,7 +1,7 @@
 import Table from 'cli-table3'
 import { asc, eq, or } from 'drizzle-orm'
 import _ from 'lodash'
-import { zodCommand } from 'zod-commander'
+import { zodCommand } from 'zod-commander/zod4'
 import db from '#/db/index.js'
 import { transactions } from '#/db/schema.js'
 import { orderBy_column } from '#/utils/command-options.js'
@@ -41,7 +41,7 @@ const txs = zodCommand({
 			.describe('The account to show the transactions of'),
 	},
 	opts: {
-		orderBy_column: orderBy_column.default('date'),
+		orderBy_column: orderBy_column.prefault('date'),
 		dividers: zs.flag.describe('Include month dividers'),
 		summary: zs.flag.describe('Show a balance summary at the end'),
 		csv: zs.flag.describe('Format the output in CSV'),
