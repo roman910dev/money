@@ -41,7 +41,7 @@
 		"zod-commander": "^0.1.0"
 	},
 	"bin": {
-		"money": "./bin/run.js"
+		"money": "./money/index.js"
 	},
 	"oclif": {
 		"bin": "money",
