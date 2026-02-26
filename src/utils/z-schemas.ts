@@ -40,19 +40,14 @@ export const date = z
 				: date.getMonth() + 1) // date of current month
 		const year =
 			spl.at(-3) ??
-			(month > date.getMonth() + 1
+			(month * 100 + day > (date.getMonth() + 1) * 100 + date.getDate()
 				? date.getFullYear() - 1 // date of previous year
 				: date.getFullYear()) // date of current year
 		return [year, month, day]
 			.map((s) => String(s ?? '').padStart(2, '0'))
 			.join('-')
 	})
-	.pipe(
-		z
-			.string()
-			.date()
-			.transform((v) => new Date(v)),
-	)
+	.pipe(z.iso.date().transform((v) => new Date(v)))
 
 export const amount = z
 	.string()
