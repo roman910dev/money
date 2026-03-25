@@ -65,8 +65,8 @@ export const amount = z
 
 const optionalEnum = <T extends string>(values: readonly [T, ...T[]]) =>
 	z
-		.enum([...values, 'NULL', ''])
-		.transform((v) => (['NULL', ''].includes(v) ? null : v) as T | null)
+		.enum([...values, '[ null ]', ''])
+		.transform((v) => (['[ null ]', ''].includes(v) ? null : v) as T | null)
 
 export const account = z.enum(accounts)
 export type Account = z.infer<typeof account>
@@ -82,5 +82,5 @@ export const transaction = z.object({
 		.string()
 		.optional()
 		.transform((v) => (v === '' ? null : v)),
-	tag: tag.prefault('NULL'),
+	tag: tag.prefault('[ null ]'),
 })

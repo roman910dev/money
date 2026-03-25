@@ -7,7 +7,7 @@ import { transactions } from '#/db/schema.js'
 import { tableNum } from '#/utils/index.js'
 import * as zs from '#/utils/z-schemas.js'
 
-const getBalance = async (account: zs.Account) => {
+export const getBalance = async (account: zs.Account) => {
 	const inc =
 		(
 			await db
