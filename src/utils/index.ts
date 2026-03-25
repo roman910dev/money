@@ -64,12 +64,19 @@ const zodCore = (zod: z.ZodTypeAny): z.ZodTypeAny =>
 			? zodCore(zod.schema)
 			: zod
 
+const zodIn = (zod: z.ZodTypeAny): z.core.$ZodType => {
+	const core = zodCore(zod)
+	return 'in' in core.def && core.def.in instanceof z.ZodType
+		? zodIn(core.def.in)
+		: core
+}
+
 export const zodInput = async <Output>(
 	message: string,
 	zod: z.ZodType<Output, string | undefined>,
 ) => {
-	const core = zodCore(zod)
-	if (!(core instanceof z.ZodEnum))
+	const zIn = zodIn(zod)
+	if (!(zIn instanceof z.ZodEnum))
 		return zod.parse(
 			await input({
 				message,
@@ -84,7 +91,7 @@ export const zodInput = async <Output>(
 			message,
 			validate: z2v(zod),
 			source: (input) => {
-				const values = core.options.map(String)
+				const values = zIn.options.map(String)
 				const def = zodDefault(zod)
 				if (!input)
 					return values
