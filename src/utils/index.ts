@@ -71,6 +71,27 @@ const zodIn = (zod: z.ZodTypeAny): z.core.$ZodType => {
 		: core
 }
 
+export const readonlyInput = (message: string, value: string | undefined) =>
+	input(
+		{
+			message,
+			required: true,
+			default: value,
+			prefill: 'editable',
+			theme: {
+				prefix: styleText(['green', 'dim'], '🟰'),
+			},
+		},
+		{ signal: AbortSignal.timeout(0) },
+	).catch((e) => {
+		if (e.name === 'AbortPromptError') return value
+		throw e
+	})
+
+type ZodInputOptions = {
+	default?: string
+	readonly?: boolean
+}
 export const zodInput = async <Output>(
 	message: string,
 	zod: z.ZodType<Output, string | undefined>,
