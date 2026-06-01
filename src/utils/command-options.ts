@@ -28,3 +28,11 @@ export const transactionOpts = {
 		.describe('Override transaction description'),
 	tag: zs.tag.optional().describe('Override transaction tag'),
 }
+
+// these should have no defaults, as they are used for overrides
+export const transactionStrOpts = {
+	...transactionOpts,
+	date: transactionOpts.date.prefault(undefined).transform(formatDate),
+	amount: transactionOpts.amount.transform((v) => v?.toString()),
+	tag: transactionOpts.tag.transform((v) => v ?? ''),
+} satisfies Record<string, z.ZodType<string | undefined>>

@@ -1,49 +1,37 @@
 import { confirm } from '@inquirer/prompts'
 import { z } from 'zod'
 import { zodCommand } from 'zod-commander/zod4'
-import templates from '#/configs/templates.js'
+import workflows from '#/configs/workflows.js'
 import db from '#/db/index.js'
 import { transactions } from '#/db/schema.js'
 import { transactionOpts } from '#/utils/command-options.js'
 import { typedObjectKeys } from '#/utils/index.js'
 import type * as zs from '#/utils/z-schemas.js'
-
 import { afterInsert } from './insert.js'
 
-type TemplateReturn = Omit<zs.InsertTx, 'date'> & Partial<zs.InsertTx>
-export type Templates = Record<
-	string,
-	| TemplateReturn
-	| TemplateReturn[]
-	| ((tx: Partial<zs.InsertTx>) => Promise<TemplateReturn[]>)
->
+type WorkflowReturn = Omit<zs.InsertTx, 'date'> & Partial<zs.InsertTx>
+type Workflow = (tx: Partial<zs.InsertTx>) => Promise<WorkflowReturn[]>
+export type Workflows = Record<string, Workflow>
 
 const getTxs = async (
-	template: keyof typeof templates,
+	workflow: keyof typeof workflows,
 	tx: Partial<zs.InsertTx> & Pick<zs.InsertTx, 'date'>,
 ): Promise<zs.InsertTx[]> => {
-	const temp = templates[template]
-	const txs: TemplateReturn[] =
-		typeof temp === 'function'
-			? await temp(tx)
-			: (Array.isArray(temp) ? temp : [temp]).map((t) => ({
-					...t,
-					...tx,
-				}))
+	const txs: WorkflowReturn[] = await workflows[workflow](tx)
 	return txs.map((newTx) => ({ date: tx.date, ...newTx }))
 }
 
-const template = zodCommand({
-	name: 'template',
-	description: 'Insert one or more transactions using one a template',
+const workflow = zodCommand({
+	name: 'workflow',
+	description: 'Insert one or more transactions using one a workflow',
 	args: {
-		template: z
-			.enum(typedObjectKeys(templates))
-			.describe('The template to use'),
+		workflow: z
+			.enum(typedObjectKeys(workflows))
+			.describe('The workflow to use'),
 	},
 	opts: transactionOpts,
-	action: async ({ template }, tx) => {
-		const txs = await getTxs(template, tx)
+	action: async ({ workflow }, tx) => {
+		const txs = await getTxs(workflow, tx)
 		console.table(txs)
 		const ans = await confirm({
 			message: 'Do you want to insert these transactions?',
@@ -54,4 +42,4 @@ const template = zodCommand({
 	},
 })
 
-export default template
+export default workflow

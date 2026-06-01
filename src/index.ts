@@ -5,12 +5,13 @@ import { Command } from 'commander'
 import balance from './cli/balance.js'
 import del from './cli/delete.js'
 import exp from './cli/export.js'
+import getConf from './cli/get-conf/index.js'
 import imp from './cli/import.js'
 import insert from './cli/insert.js'
 import tags from './cli/tags.js'
-import template from './cli/template.js'
 import test from './cli/test.js'
 import txs from './cli/txs.js'
+import workflow from './cli/workflow.js'
 
 const program = new Command()
 
@@ -21,10 +22,11 @@ program
 	.addCommand(balance)
 	.addCommand(del)
 	.addCommand(exp)
+	.addCommand(getConf)
 	.addCommand(imp)
 	.addCommand(insert)
 	.addCommand(tags)
-	.addCommand(template)
+	.addCommand(workflow)
 	.addCommand(test)
 	.addCommand(txs)
 	.parseAsync(process.argv)

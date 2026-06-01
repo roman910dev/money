@@ -1,3 +1,4 @@
+import { styleText } from 'node:util'
 import { input, search } from '@inquirer/prompts'
 import chalk from 'chalk'
 import Fuse from 'fuse.js'
@@ -71,47 +72,80 @@ const zodIn = (zod: z.ZodTypeAny): z.core.$ZodType => {
 		: core
 }
 
+export const readonlyInput = (message: string, value: string | undefined) =>
+	input(
+		{
+			message,
+			required: true,
+			default: value,
+			prefill: 'editable',
+			theme: {
+				prefix: styleText(['green', 'dim'], '🟰'),
+			},
+		},
+		{ signal: AbortSignal.timeout(0) },
+	).catch((e) => {
+		if (e.name === 'AbortPromptError') return value
+		throw e
+	})
+
+type ZodInputOptions = {
+	default?: string
+	readonly?: boolean
+}
 export const zodInput = async <Output>(
 	message: string,
 	zod: z.ZodType<Output, string | undefined>,
+	opts: ZodInputOptions = {},
 ) => {
 	const zIn = zodIn(zod)
-	if (!(zIn instanceof z.ZodEnum))
-		return zod.parse(
-			await input({
-				message,
-				validate: z2v(zod),
-				required: !zod.isOptional(),
-				default: zodDefault(zod),
-			}),
-		)
+	const def = opts.default ?? zodDefault(zod)
+	const validate = z2v(zod)
 
-	return zod.parse(
-		await search({
-			message,
-			validate: z2v(zod),
-			source: (input) => {
-				const values = zIn.options.map(String)
-				const def = zodDefault(zod)
-				if (!input)
-					return values
-						.slice()
-						.sort((a, b) => (a === def ? -1 : b === def ? 1 : 0))
-						.map((v) => ({ value: v }))
+	const res = opts.readonly
+		? readonlyInput(message, def)
+		: zIn instanceof z.ZodEnum
+			? search({
+					message,
+					validate,
+					source: (input) => {
+						const values = zIn.options.map(String)
+						if (!input)
+							return values
+								.slice()
+								.sort((a, b) => (a === def ? -1 : b === def ? 1 : 0))
+								.map((v) => ({ value: v }))
 
-				const fuse = new Fuse(values)
-				return fuse.search(input).map(({ item }) => ({ value: item }))
-			},
-		}),
-	)
+						const fuse = new Fuse(values)
+						return fuse.search(input).map(({ item }) => ({ value: item }))
+					},
+				})
+			: input({
+					message,
+					validate,
+					required: !zod.isOptional(),
+					default: def,
+				})
+
+	return zod.parse(await res)
 }
 
+type ZodObjectInputOptions<K extends string = string> = {
+	default?: Partial<Record<K, string>>
+	readonly?: Partial<Record<K, string>>
+}
 export const zodObjectInput = async <
-	S extends Record<string, z.ZodType<unknown, string | undefined>>,
+	K extends string,
+	S extends Record<K, z.ZodType<unknown, string | undefined>>,
 >(
 	shape: S,
+	{ readonly = {}, default: def = {} }: ZodObjectInputOptions<K> = {},
 ) => {
 	const obj: Record<string, unknown> = {}
-	for (const key in shape) obj[key] = await zodInput(key, shape[key])
+	for (const key in shape)
+		obj[key] = await zodInput(key, shape[key], {
+			default: readonly[key] ?? def[key],
+			readonly: key in readonly && readonly[key as unknown as K] !== undefined,
+		})
 	return obj as z.infer<z.ZodObject<S>>
 }
