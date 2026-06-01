@@ -19,7 +19,8 @@
 		"repo",
 		"sql",
 		"delete",
-		"balance"
+		"balance",
+		"conf"
 	],
 	"[typescript]": {
 		"editor.defaultFormatter": "biomejs.biome"
